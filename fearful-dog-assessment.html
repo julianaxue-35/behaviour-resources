@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fearful Dog Desensitisation Assessment — RSPCA Victoria</title>
+<style>
+:root{
+  --bg:#FAFAF7;--bg2:#F0EFE8;--bg3:#E8E7E0;
+  --card:#FFFFFF;--text:#1A1A18;--text2:#5A5956;--text3:#9A9890;
+  --border:rgba(0,0,0,0.11);--accent:#1D4ED8;
+  --r:10px;--font:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+  --tip-bg:#EAF3DE;--tip-border:#27500A;--tip-text:#1A3306;
+  --warn-bg:#FAEEDA;--warn-border:#854F0B;--warn-text:#4A2800;
+  --danger-bg:#FCEBEB;--danger-border:#A32D2D;--danger-text:#5C1010;
+  --info-bg:#E0F2FE;--info-border:#0369A1;--info-text:#0C4A6E;
+  --gA-bg:#DCFCE7;--gA-tx:#14532D;--gB-bg:#FEF3C7;--gB-tx:#78350F;
+  --gC-bg:#FEE2E2;--gC-tx:#7F1D1D;--gD-bg:#7F1D1D;--gD-tx:#FFFFFF;
+}
+@media(prefers-color-scheme:dark){:root{
+  --bg:#141412;--bg2:#1E1E1C;--bg3:#252523;
+  --card:#1E1E1C;--text:#F5F4F0;--text2:#CCCAC4;--text3:#9A9892;
+  --border:rgba(255,255,255,0.13);
+  --tip-bg:#0F2800;--tip-border:#5AAA20;--tip-text:#90D060;
+  --warn-bg:#3D2000;--warn-border:#C07A20;--warn-text:#F0C070;
+  --danger-bg:#3A0A0A;--danger-border:#C04040;--danger-text:#F09090;
+  --info-bg:#0C2D48;--info-border:#38BDF8;--info-text:#7DD3FC;
+  --gA-bg:#064E3B;--gA-tx:#6EE7B7;--gB-bg:#451A03;--gB-tx:#FDE68A;
+  --gC-bg:#450A0A;--gC-tx:#FCA5A5;--gD-bg:#7F1D1D;--gD-tx:#FFFFFF;
+}}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{-webkit-text-size-adjust:100%;}
+body{font-family:var(--font);background:var(--bg);color:var(--text);padding:.75rem .9rem 3rem;font-size:15px;line-height:1.6;}
+.wrap{max-width:700px;margin:0 auto;}
+.hdr{padding:.5rem 0 1.25rem;}
+.hdr-tag{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;background:#EDE9FE;color:#5B21B6;padding:3px 10px;border-radius:20px;margin-bottom:.6rem;}
+@media(prefers-color-scheme:dark){.hdr-tag{background:#2E1065;color:#C4B5FD;}}
+.hdr h1{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-bottom:.3rem;}
+.hdr p{font-size:13px;color:var(--text2);}
+.fsec{background:var(--card);border:.5px solid var(--border);border-radius:var(--r);margin:10px 0;overflow:hidden;}
+.fsec-hdr{padding:12px 16px 10px;border-bottom:.5px solid var(--border);}
+.fsec-hdr h2{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);}
+.fsec-hdr .sub{font-size:12px;font-weight:500;text-transform:none;letter-spacing:0;color:var(--text3);margin-top:3px;display:block;}
+.fsec-body{padding:14px 16px;}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:8px 0;}
+.fgroup{margin:8px 0;}
+.flabel{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text3);display:block;margin-bottom:5px;}
+.finput,.fselect{width:100%;padding:10px 12px;font-size:16px;font-family:var(--font);border:.5px solid var(--border);border-radius:8px;background:var(--bg2);color:var(--text);-webkit-appearance:none;appearance:none;}
+.finput:focus,.fselect:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 2px rgba(29,78,216,.15);}
+.days-box{margin-top:10px;background:var(--bg2);border:.5px solid var(--border);border-radius:8px;padding:10px 14px;font-size:14px;color:var(--text2);display:flex;align-items:center;justify-content:space-between;gap:10px;}
+.days-box .num{font-size:20px;font-weight:700;color:var(--text);}
+.days-box.warnstate{background:var(--warn-bg);border-color:var(--warn-border);color:var(--warn-text);}
+.deftoggle{display:inline-block;font-size:13px;font-weight:600;color:var(--accent);cursor:pointer;padding:6px 0;border:none;background:none;font-family:var(--font);}
+.deftoggle:hover{text-decoration:underline;}
+.defpanel{display:none;margin-top:10px;}
+.defpanel.open{display:block;}
+.defterm{margin:10px 0 2px;font-size:13px;font-weight:700;color:var(--text);}
+.defdesc{font-size:13px;color:var(--text2);line-height:1.5;margin-bottom:6px;}
+.bcat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0;}
+.bcat{border-radius:9px;padding:12px 14px;border:.5px solid var(--border);}
+.bcat-ok{background:var(--tip-bg);border-color:var(--tip-border);}
+.bcat-concern{background:var(--warn-bg);border-color:var(--warn-border);}
+.bcat h3{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px;}
+.bcat-ok h3{color:var(--tip-text);}.bcat-concern h3{color:var(--warn-text);}
+.bcat-item{display:flex;align-items:center;gap:8px;font-size:13px;padding:4px 0;cursor:pointer;line-height:1.3;}
+.bcat-item input{width:16px;height:16px;flex-shrink:0;cursor:pointer;}
+.bcat-ok .bcat-item{color:var(--tip-text);}.bcat-concern .bcat-item{color:var(--warn-text);}
+.rung{display:flex;align-items:flex-start;gap:11px;padding:11px 12px;border:.5px solid var(--border);border-radius:9px;margin:7px 0;cursor:pointer;background:var(--bg2);transition:border-color .12s,background .12s;}
+.rung:hover{border-color:var(--accent);}
+.rung input{margin-top:2px;width:18px;height:18px;flex-shrink:0;accent-color:var(--accent);cursor:pointer;}
+.rung.checked{border-color:var(--accent);background:rgba(29,78,216,.06);}
+.rung-body{flex:1;}
+.rung-score{display:inline-block;min-width:30px;text-align:center;font-size:12px;font-weight:800;padding:2px 8px;border-radius:20px;background:var(--bg3);color:var(--text2);margin-right:8px;}
+.rung.checked .rung-score{background:var(--accent);color:#fff;}
+.rung-text{font-size:14px;color:var(--text);line-height:1.45;}
+.dhint{font-size:12px;color:var(--text3);font-style:italic;margin-top:8px;line-height:1.5;}
+.flag-row{display:flex;align-items:flex-start;gap:10px;padding:11px 12px;border:.5px solid var(--danger-border);border-radius:9px;background:var(--danger-bg);color:var(--danger-text);cursor:pointer;}
+.flag-row input{margin-top:2px;width:18px;height:18px;flex-shrink:0;accent-color:#DC2626;cursor:pointer;}
+.flag-row .ft{font-size:14px;font-weight:600;}
+.flag-row .fs{font-size:12px;font-weight:400;display:block;margin-top:2px;opacity:.9;}
+.result{position:sticky;bottom:0;z-index:5;margin:14px 0 0;border-radius:var(--r);overflow:hidden;border:.5px solid var(--border);box-shadow:0 -2px 14px rgba(0,0,0,.08);}
+.result-top{display:flex;align-items:stretch;}
+.result-score{flex:1;background:var(--card);padding:16px 18px;}
+.result-score .lab{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);}
+.result-score .big{font-size:34px;font-weight:800;letter-spacing:-.02em;line-height:1.05;margin-top:2px;}
+.result-score .big span{font-size:17px;font-weight:600;color:var(--text3);}
+.result-score .meta{font-size:12px;color:var(--text2);margin-top:3px;}
+.result-grade{width:128px;flex-shrink:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px;text-align:center;}
+.result-grade .gletter{font-size:40px;font-weight:800;line-height:1;}
+.result-grade .glabel{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;margin-top:4px;}
+.result-grade.pending{background:var(--bg3);color:var(--text3);}
+.result-grade.gA{background:var(--gA-bg);color:var(--gA-tx);}
+.result-grade.gB{background:var(--gB-bg);color:var(--gB-tx);}
+.result-grade.gC{background:var(--gC-bg);color:var(--gC-tx);}
+.result-grade.gD{background:var(--gD-bg);color:var(--gD-tx);}
+.result-flags{background:var(--card);border-top:.5px solid var(--border);padding:0;}
+.result-flags:empty{display:none;}
+.rflag{padding:9px 18px;font-size:13px;font-weight:600;display:flex;align-items:center;gap:8px;border-top:.5px solid var(--border);}
+.rflag:first-child{border-top:none;}
+.rflag.danger{background:var(--danger-bg);color:var(--danger-text);}
+.rflag.warn{background:var(--warn-bg);color:var(--warn-text);}
+.rflag.info{background:var(--info-bg);color:var(--info-text);}
+.rflag.ok{background:var(--tip-bg);color:var(--tip-text);}
+.alert{border-radius:8px;padding:10px 14px;margin:8px 0;border-left:3px solid;font-size:13px;line-height:1.55;}
+.alert strong{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.04em;margin-bottom:3px;}
+.tip{background:var(--tip-bg);border-color:var(--tip-border);color:var(--tip-text);}
+.infoa{background:var(--info-bg);border-color:var(--info-border);color:var(--info-text);}
+.preview{background:var(--bg2);border:.5px solid var(--border);border-radius:var(--r);padding:14px 16px;font-size:13px;font-family:monospace;line-height:1.65;white-space:pre-wrap;margin:10px 0;display:none;color:var(--text2);max-height:400px;overflow-y:auto;}
+.btn{width:100%;padding:14px;font-size:15px;font-weight:700;border:none;border-radius:var(--r);cursor:pointer;margin:5px 0;font-family:var(--font);transition:opacity .15s;letter-spacing:.01em;}
+.btn:hover{opacity:.88;}
+.btn-primary{background:var(--accent);color:#fff;}
+.btn-teams{background:#5558AF;color:#fff;}
+.btn-copy{background:var(--bg2);color:var(--text);border:.5px solid var(--border);}
+.btn-clear{background:transparent;color:var(--text3);font-size:13px;padding:8px;border:none;cursor:pointer;font-family:var(--font);display:block;margin:4px auto;}
+.btn-divider{height:.5px;background:var(--border);margin:12px 0;}
+.foot{text-align:center;font-size:12px;color:var(--text3);margin-top:2rem;line-height:1.6;}
+@media(min-width:580px){body{padding:1.25rem 1.5rem 3rem;}.fsec-body{padding:16px 20px;}.fsec-hdr{padding:14px 20px 12px;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="hdr">
+  <span class="hdr-tag">Behaviour Program</span>
+  <h1>Fearful Dog Desensitisation Assessment</h1>
+  <p>Residual Fear Score &bull; RSPCA Victoria &bull; 5 = best achievable, 80 = most fearful</p>
+</div>
+
+<!-- 1. PATIENT -->
+<div class="fsec">
+  <div class="fsec-hdr"><h2>1 &mdash; Patient</h2></div>
+  <div class="fsec-body">
+    <div class="frow">
+      <div class="fgroup"><label class="flabel" for="shnum">ShelterMate #</label><input type="text" id="shnum" class="finput" placeholder="e.g. 12345" inputmode="numeric"></div>
+      <div class="fgroup"><label class="flabel" for="dogname">Dog name</label><input type="text" id="dogname" class="finput" placeholder="e.g. Lonnie"></div>
+    </div>
+    <div class="frow">
+      <div class="fgroup"><label class="flabel" for="arrival">Date of arrival</label><input type="date" id="arrival" class="finput"></div>
+      <div class="fgroup"><label class="flabel" for="adate">Date of assessment</label><input type="date" id="adate" class="finput"></div>
+    </div>
+    <div class="fgroup"><label class="flabel" for="assessor">Assessor (optional)</label><input type="text" id="assessor" class="finput" placeholder="Your name"></div>
+    <div id="days-box" class="days-box"><span>Days in care</span><span class="num" id="days-num">&mdash;</span></div>
+  </div>
+</div>
+
+<!-- 2. BEHAVIOUR OBSERVATION -->
+<div class="fsec">
+  <div class="fsec-hdr"><h2>2 &mdash; Behaviour observation</h2><span class="sub">Tick all behaviours observed during this assessment</span></div>
+  <div class="fsec-body">
+    <div class="bcat-grid">
+      <div class="bcat bcat-ok">
+        <h3>&#x2705; Acceptable</h3>
+        <label class="bcat-item"><input type="checkbox" class="bobs" data-cat="ok" data-label="Fearful body language"> Fearful body language</label>
+        <label class="bcat-item"><input type="checkbox" class="bobs" data-cat="ok" data-label="Inhibited movement"> Inhibited movement</label>
+        <label class="bcat-item"><input type="checkbox" class="bobs" data-cat="ok" data-label="Approach/avoidance behaviour"> Approach/avoidance</label>
+        <label class="bcat-item"><input type="checkbox" class="bobs" data-cat="ok" data-label="Escape behaviour"> Escape behaviour</label>
+      </div>
+      <div class="bcat bcat-concern">
+        <h3>&#x26A0;&#xFE0F; Concerning</h3>
+        <label class="bcat-item"><input type="checkbox" class="bobs" data-cat="concern" data-label="Frenetic movement"> Frenetic movement</label>
+        <label class="bcat-item"><input type="checkbox" class="bobs" data-cat="concern" data-label="Catatonia"> Catatonia</label>
+        <label class="bcat-item"><input type="checkbox" class="bobs" data-cat="concern" data-label="Defensive aggression"> Defensive aggression</label>
+        <label class="bcat-item"><input type="checkbox" class="bobs" data-cat="concern" data-label="Offensive aggression"> Offensive aggression</label>
+      </div>
+    </div>
+    <div class="alert infoa" style="margin-top:12px">
+      <strong>7-day rule</strong>
+      Concerning behaviours within the first 7 days are expected during adjustment. If they persist beyond 7 days with no progress, flag for discussion with the behaviour team and behaviour vet.
+    </div>
+    <button class="deftoggle" id="def-toggle" onclick="toggleDefs()">&#x25B6; Show definitions</button>
+    <div class="defpanel" id="def-panel">
+      <p class="defterm">Fearful body language</p>
+      <p class="defdesc">Crouched posture, cowering, ears pinned back, wide eyes, tail tucked or low, panting, drooling, trembling, repeated startling, inappropriate urination or defecation, or expressing anal glands.</p>
+      <p class="defterm">Inhibited movement</p>
+      <p class="defdesc">Hesitates, moves slowly or cautiously, or stops moving altogether. Appears shut down but remains aware of surroundings, distinguishing it from catatonia.</p>
+      <p class="defterm">Approach/avoidance behaviour</p>
+      <p class="defdesc">Approaches a person or object then quickly retreats, possibly repeating the cycle. Appears conflicted between curiosity and fear or defensiveness.</p>
+      <p class="defterm">Escape behaviour</p>
+      <p class="defdesc">Panicked flight or attempts to retreat, hide, or reach an exit. May fixate on exit points or jump at windows and doors.</p>
+      <p class="defterm">Frenetic movement <span style="color:var(--warn-text);font-weight:400">(concerning)</span></p>
+      <p class="defdesc">Extremely active, disorganised, seemingly directionless rapid movement with no obvious purpose.</p>
+      <p class="defterm">Catatonia <span style="color:var(--warn-text);font-weight:400">(concerning)</span></p>
+      <p class="defdesc">Completely immobile and disconnected from surroundings. Does not respond to obvious stimuli. If touched, stays still as though unable to register the contact.</p>
+      <p class="defterm">Defensive aggression <span style="color:var(--warn-text);font-weight:400">(concerning)</span></p>
+      <p class="defdesc">Stiffening, whale eye, baring teeth, barking, growling, or snapping. Occurs alongside fearful body language and only when the dog cannot move away. Does not move forward or display offensive body postures.</p>
+      <p class="defterm">Offensive aggression <span style="color:var(--warn-text);font-weight:400">(concerning)</span></p>
+      <p class="defdesc">Charges forward with ears up, tail stiff and raised, weight forward, upright posture, and prolonged direct hard eye contact. Directed toward people including familiar people.</p>
+    </div>
+  </div>
+</div>
+
+<!-- DOMAIN A -->
+<div class="fsec">
+  <div class="fsec-hdr"><h2>A &mdash; Kennel presence</h2><span class="sub">Select the best rung the dog currently passes</span></div>
+  <div class="fsec-body">
+    <label class="rung"><input type="radio" name="domA" data-score="0" data-label="Unfamiliar person sits within 1 m, with mild to moderate level of fear"><span class="rung-body"><span class="rung-score">0</span><span class="rung-text"><strong>Unfamiliar</strong> person sits within 1 m, with mild to moderate level of fear</span></span></label>
+    <label class="rung"><input type="radio" name="domA" data-score="5" data-label="Familiar person sits within 1 m, acceptable fear"><span class="rung-body"><span class="rung-score">5</span><span class="rung-text"><strong>Familiar</strong> person sits within 1 m, acceptable fear</span></span></label>
+    <label class="rung"><input type="radio" name="domA" data-score="10" data-label="Familiar person sits within 3 m, acceptable fear"><span class="rung-body"><span class="rung-score">10</span><span class="rung-text">Familiar person sits within 3 m, acceptable fear</span></span></label>
+    <label class="rung"><input type="radio" name="domA" data-score="15" data-label="Familiar person enters pen, acceptable fear"><span class="rung-body"><span class="rung-score">15</span><span class="rung-text">Familiar person enters pen, acceptable fear</span></span></label>
+    <label class="rung"><input type="radio" name="domA" data-score="20" data-label="Extreme fear (loss of bladder/bowel control, escape, violent trembling) or aggression in kennel (growling, charging front, showing teeth)"><span class="rung-body"><span class="rung-score">20</span><span class="rung-text">Extreme fear (loss of bladder/bowel control, escape, violent trembling), <strong>or</strong> aggression in kennel (growling, charging front, showing teeth)</span></span></label>
+    <p class="dhint">Alarm barking alone is acceptable if it stops within 5 seconds and the dog does not charge the front of the kennel.</p>
+  </div>
+</div>
+
+<!-- DOMAIN B -->
+<div class="fsec">
+  <div class="fsec-hdr"><h2>B &mdash; Eating / social interaction</h2><span class="sub">Select the best rung the dog currently passes</span></div>
+  <div class="fsec-body">
+    <label class="rung"><input type="radio" name="domB" data-score="0" data-label="Eats with an unfamiliar person present in the pen (at any distance, 0-3 m)"><span class="rung-body"><span class="rung-score">0</span><span class="rung-text">Eats with an <strong>unfamiliar</strong> person present in the pen (at any distance, 0&ndash;3 m)</span></span></label>
+    <label class="rung"><input type="radio" name="domB" data-score="5" data-label="Eats from familiar person's hand"><span class="rung-body"><span class="rung-score">5</span><span class="rung-text">Eats from familiar person&rsquo;s hand</span></span></label>
+    <label class="rung"><input type="radio" name="domB" data-score="10" data-label="Eats when familiar person is within 1 m"><span class="rung-body"><span class="rung-score">10</span><span class="rung-text">Eats when familiar person is within 1 m</span></span></label>
+    <label class="rung"><input type="radio" name="domB" data-score="15" data-label="Eats when familiar person tosses treats from outside pen"><span class="rung-body"><span class="rung-score">15</span><span class="rung-text">Eats when familiar person tosses treats from outside pen</span></span></label>
+    <label class="rung"><input type="radio" name="domB" data-score="20" data-label="Eats only when no one is around"><span class="rung-body"><span class="rung-score">20</span><span class="rung-text">Eats <strong>only</strong> when no one is around</span></span></label>
+    <p class="dhint">Minimum achievable score for this domain is 0.</p>
+  </div>
+</div>
+
+<!-- DOMAIN C -->
+<div class="fsec">
+  <div class="fsec-hdr"><h2>C &mdash; Leashing</h2><span class="sub">Select the best rung the dog currently passes</span></div>
+  <div class="fsec-body">
+    <label class="rung"><input type="radio" name="domC" data-score="0" data-label="Unfamiliar person can leash/unleash (slip and clip) across varied environments, no familiar person or helper dog needed"><span class="rung-body"><span class="rung-score">0</span><span class="rung-text">Unfamiliar person can leash/unleash (slip and clip) across varied environments; no familiar person or helper dog needed</span></span></label>
+    <label class="rung"><input type="radio" name="domC" data-score="5" data-label="Follows familiar person out of the pen on lead"><span class="rung-body"><span class="rung-score">5</span><span class="rung-text">Follows familiar person out of the pen on lead</span></span></label>
+    <label class="rung"><input type="radio" name="domC" data-score="10" data-label="Familiar person can clip/unclip lead or slip lead over head, with mild signs of fear (lip licking, some avoidance, ears back, body tenses slightly, temporary increase in respiratory rate)"><span class="rung-body"><span class="rung-score">10</span><span class="rung-text">Familiar person can clip/unclip or slip lead, with <strong>mild</strong> fear<span class="dhint" style="margin-top:4px;display:block;font-style:normal">(lip licking, some avoidance, ears back, body tenses slightly, temporary increase in respiratory rate)</span></span></span></label>
+    <label class="rung"><input type="radio" name="domC" data-score="15" data-label="Familiar person can clip/unclip lead or slip lead over head, with moderate signs of fear (all mild signs at more severe scale, plus trembling and freezing)"><span class="rung-body"><span class="rung-score">15</span><span class="rung-text">Familiar person can clip/unclip or slip lead, with <strong>moderate</strong> fear<span class="dhint" style="margin-top:4px;display:block;font-style:normal">(all mild signs at a more severe scale, plus trembling and freezing)</span></span></span></label>
+    <label class="rung"><input type="radio" name="domC" data-score="20" data-label="When leashed: tries to run away, shows aggression (lunge/bark/growl/snap), becomes catatonic, or loss of bladder/bowel control"><span class="rung-body"><span class="rung-score">20</span><span class="rung-text">When leashed: tries to run away, shows aggression (lunge/bark/growl/snap), becomes catatonic, or loss of bladder/bowel control</span></span></label>
+  </div>
+</div>
+
+<!-- DOMAIN D -->
+<div class="fsec">
+  <div class="fsec-hdr"><h2>D &mdash; Consent testing</h2><span class="sub">Select the best rung the dog currently passes</span></div>
+  <div class="fsec-body">
+    <label class="rung"><input type="radio" name="domD" data-score="0" data-label="Unfamiliar person pets non-sensitive areas with mild signs of fear"><span class="rung-body"><span class="rung-score">0</span><span class="rung-text">Unfamiliar person <strong>pets</strong> non-sensitive areas with mild signs of fear</span></span></label>
+    <label class="rung"><input type="radio" name="domD" data-score="5" data-label="Familiar person pets sensitive areas (paws, ears, muzzle) with mild signs of fear"><span class="rung-body"><span class="rung-score">5</span><span class="rung-text">Familiar person <strong>pets</strong> sensitive areas (paws, ears, muzzle) with mild signs of fear</span></span></label>
+    <label class="rung"><input type="radio" name="domD" data-score="10" data-label="Familiar person pets non-sensitive areas with mild signs of fear (lip licking, some avoidance, ears back, body tenses slightly, temporary increase in respiratory rate)"><span class="rung-body"><span class="rung-score">10</span><span class="rung-text">Familiar person <strong>pets</strong> non-sensitive areas with <strong>mild</strong> fear<span class="dhint" style="margin-top:4px;display:block;font-style:normal">(lip licking, some avoidance, ears back, body tenses slightly, temporary increase in respiratory rate)</span></span></span></label>
+    <label class="rung"><input type="radio" name="domD" data-score="15" data-label="Familiar person consent tests non-sensitive areas with moderate signs of fear (all mild signs at more severe scale, plus trembling and freezing)"><span class="rung-body"><span class="rung-score">15</span><span class="rung-text">Familiar person <strong>consent tests</strong> non-sensitive areas with <strong>moderate</strong> fear<span class="dhint" style="margin-top:4px;display:block;font-style:normal">(all mild signs at a more severe scale, plus trembling and freezing)</span></span></span></label>
+    <label class="rung"><input type="radio" name="domD" data-score="20" data-label="Escapes, shows severe fear (loss of bladder/bowel control), or catatonia during consent testing"><span class="rung-body"><span class="rung-score">20</span><span class="rung-text">Escapes, shows <strong>severe</strong> fear (loss of bladder/bowel control), or catatonia during consent testing</span></span></label>
+    <div class="alert infoa" style="margin-top:10px">
+      <strong>Petting vs consent testing</strong>
+      <em>Petting</em> is sustained stroking of the dog. <em>Consent testing</em> may involve stroking or applying brief gentle pressure for a maximum of 5 seconds. Rungs 0, 5, and 10 use petting; rungs 15 and 20 use consent testing.
+    </div>
+  </div>
+</div>
+
+<!-- SAFETY FLAG -->
+<div class="fsec">
+  <div class="fsec-hdr"><h2>Safety flag</h2></div>
+  <div class="fsec-body">
+    <label class="flag-row"><input type="checkbox" id="bite-flag"><span><span class="ft">Bite or attempt to bite at any point during the assessment</span><span class="fs">Automatically sets grade D and triggers a behaviour vet review, regardless of total score.</span></span></label>
+  </div>
+</div>
+
+<!-- LIVE RESULT -->
+<div class="result">
+  <div class="result-top">
+    <div class="result-score">
+      <div class="lab">Residual Fear Score</div>
+      <div class="big"><span id="r-flagged" style="display:none">D &mdash; </span><span id="r-total">0</span> <span>/ 80</span></div>
+      <div class="meta" id="r-meta">0 of 4 domains scored</div>
+    </div>
+    <div class="result-grade pending" id="r-grade">
+      <div class="gletter" id="r-letter">&ndash;</div>
+      <div class="glabel" id="r-gradelabel">Pending</div>
+    </div>
+  </div>
+  <div class="result-flags" id="r-flags"></div>
+</div>
+
+<!-- GENERATE + SAVE -->
+<div class="fsec" style="margin-top:14px">
+  <div class="fsec-hdr"><h2>Generate note</h2></div>
+  <div class="fsec-body">
+    <div class="alert tip"><strong>How this works</strong>Score all four domains, then Generate. Copy for ShelterBuddy gives plain text ready to paste into ezyVet or ShelterBuddy.</div>
+    <div id="note-preview" class="preview"></div>
+    <div class="btn-divider"></div>
+    <button class="btn btn-primary" onclick="generateNote()">&#x2699;&#xFE0F; Generate note</button>
+    <button class="btn btn-teams" onclick="shareToTeams()">&#x1F4AC; Share to Microsoft Teams</button>
+    <button class="btn btn-copy" id="copy-btn" onclick="copyNote()">&#x1F4CB; Copy for ShelterBuddy / ezyVet</button>
+    <button class="btn btn-copy" onclick="shareNote()">&#x1F4E4; Share via phone (WhatsApp / Messages)</button>
+    <button class="btn-clear" onclick="clearAll()">&#10006; Clear all fields</button>
+  </div>
+</div>
+
+<div class="foot">
+  Fearful Dog Desensitisation Assessment &bull; RSPCA Victoria Behaviour Program &bull; Prepared by Dr Juliana Xue<br>
+  A structured clinical scoring aid, not a validated instrument. For clinical decisions always consult the behaviour veterinarian.
+</div>
+</div><!-- /wrap -->
+
+<script>
+// ---- Days in care ----
+function getDaysInCare(){
+  var arr = document.getElementById('arrival').value;
+  var ass = document.getElementById('adate').value;
+  if(!arr||!ass) return null;
+  var d = Math.round((new Date(ass+'T00:00:00') - new Date(arr+'T00:00:00'))/86400000);
+  return d>=0 ? d : null;
+}
+function updateDays(){
+  var arr=document.getElementById('arrival').value, ass=document.getElementById('adate').value;
+  var box=document.getElementById('days-box'), out=document.getElementById('days-num');
+  box.classList.remove('warnstate');
+  if(!arr||!ass){out.textContent='\u2014';return;}
+  var d=Math.round((new Date(ass+'T00:00:00')-new Date(arr+'T00:00:00'))/86400000);
+  if(d<0){out.textContent='check dates';box.classList.add('warnstate');return;}
+  out.textContent=d+(d===1?' day':' days');
+}
+document.getElementById('arrival').addEventListener('change',function(){updateDays();refresh();});
+document.getElementById('adate').addEventListener('change',function(){updateDays();refresh();});
+
+// ---- Definitions toggle ----
+function toggleDefs(){
+  var panel=document.getElementById('def-panel'), btn=document.getElementById('def-toggle');
+  if(panel.classList.contains('open')){panel.classList.remove('open');btn.innerHTML='&#x25B6; Show definitions';}
+  else{panel.classList.add('open');btn.innerHTML='&#x25BC; Hide definitions';}
+}
+
+// ---- Scoring ----
+var DOMAINS=['A','B','C','D'];
+function selectedRung(L){
+  var r=document.querySelector('input[name="dom'+L+'"]:checked');
+  return r?{score:parseInt(r.dataset.score,10),label:r.dataset.label}:null;
+}
+function gradeFromTotal(t){
+  if(t<=10) return {k:'gA',letter:'A',label:'No concerns'};
+  if(t<=28) return {k:'gB',letter:'B',label:'Mild concern(s)'};
+  if(t<=55) return {k:'gC',letter:'C',label:'Moderate concern(s)'};
+  return {k:'gD',letter:'D',label:'Severe concern(s)'};
+}
+function hasConcerning(){
+  var els=document.querySelectorAll('.bobs[data-cat="concern"]');
+  for(var i=0;i<els.length;i++){ if(els[i].checked) return true; }
+  return false;
+}
+function getConcerningLabels(){ var o=[]; document.querySelectorAll('.bobs[data-cat="concern"]:checked').forEach(function(c){o.push(c.dataset.label);}); return o; }
+function getAcceptableLabels(){ var o=[]; document.querySelectorAll('.bobs[data-cat="ok"]:checked').forEach(function(c){o.push(c.dataset.label);}); return o; }
+function computeState(){
+  var total=0,scored=0,picks={};
+  DOMAINS.forEach(function(L){var s=selectedRung(L);if(s){total+=s.score;scored++;picks[L]=s;}});
+  var bite=document.getElementById('bite-flag').checked;
+  return{total:total,scored:scored,complete:scored===4,picks:picks,bite:bite};
+}
+function refresh(){
+  document.querySelectorAll('.rung').forEach(function(r){
+    var inp=r.querySelector('input'); if(inp&&inp.checked) r.classList.add('checked'); else r.classList.remove('checked');
+  });
+  var st=computeState();
+  document.getElementById('r-total').textContent=st.total;
+  document.getElementById('r-meta').textContent=st.scored+' of 4 domains scored'+(st.complete?'':' \u2014 complete all 4 for grade');
+  var gradeEl=document.getElementById('r-grade'),letterEl=document.getElementById('r-letter'),glabelEl=document.getElementById('r-gradelabel'),flaggedEl=document.getElementById('r-flagged');
+  gradeEl.className='result-grade'; flaggedEl.style.display='none';
+  if(st.bite){gradeEl.classList.add('gD');letterEl.textContent='D';glabelEl.textContent='Bite recorded';flaggedEl.style.display='inline';}
+  else if(st.complete){var g=gradeFromTotal(st.total);gradeEl.classList.add(g.k);letterEl.textContent=g.letter;glabelEl.textContent=g.label;}
+  else{gradeEl.classList.add('pending');letterEl.textContent='\u2013';glabelEl.textContent='Pending';}
+  var flags=document.getElementById('r-flags'); flags.innerHTML='';
+  if(st.bite) flags.innerHTML+='<div class="rflag danger">\u26D4 Bite / attempt to bite \u2014 automatic behaviour vet review</div>';
+  if(hasConcerning()){
+    var days=getDaysInCare();
+    if(days!==null&&days>7) flags.innerHTML+='<div class="rflag warn">\u26A0\uFE0F Concerning behaviour beyond day 7 \u2014 discuss with behaviour team and behaviour vet</div>';
+    else if(days!==null&&days<=7) flags.innerHTML+='<div class="rflag info">\u2139\uFE0F Within first 7 days \u2014 concerning behaviour expected during adjustment</div>';
+    else flags.innerHTML+='<div class="rflag warn">\u26A0\uFE0F Concerning behaviour \u2014 enter arrival date to check 7-day rule</div>';
+  }
+}
+document.addEventListener('change',function(e){
+  if(!e.target) return;
+  var t=e.target;
+  if((t.name&&t.name.indexOf('dom')===0)||t.id==='bite-flag'||t.classList.contains('bobs')){refresh();}
+});
+
+// ---- Date helper ----
+function fmtDate(iso){ if(!iso) return ''; var p=iso.split('-'); return p[2]+'/'+p[1]+'/'+p[0]; }
+
+// ---- Note generator ----
+function buildNote(){
+  var f=function(id){var e=document.getElementById(id);return e?e.value.trim():'';};
+  var dog=f('dogname'),sh=f('shnum'),assessor=f('assessor'),arrival=f('arrival'),adate=f('adate');
+  if(!dog){alert('Please enter the dog name.');return null;}
+  var st=computeState();
+  if(!st.complete&&!st.bite){if(!confirm('Only '+st.scored+' of 4 domains scored. Generate anyway?')) return null;}
+  var daysNum=getDaysInCare(), daysTxt=daysNum!==null?daysNum+(daysNum===1?' day':' days'):'';
+  var sep='\r\n', n='';
+  n+='FEARFUL DOG DESENSITISATION ASSESSMENT \u2014 '+dog.toUpperCase()+(sh?' (#'+sh+')':'')+sep;
+  n+='Date of assessment: '+fmtDate(adate)+(assessor?' | Assessor: '+assessor:'')+sep;
+  if(arrival) n+='Date of arrival: '+fmtDate(arrival)+(daysTxt?' | Days in care: '+daysTxt:'')+sep;
+  n+=sep;
+  var okL=getAcceptableLabels(), cL=getConcerningLabels();
+  if(okL.length||cL.length){
+    n+='OBSERVED BEHAVIOURS:'+sep;
+    if(okL.length) n+='Acceptable: '+okL.join(', ')+sep;
+    if(cL.length) n+='Concerning: '+cL.join(', ')+sep;
+    n+=sep;
+  }
+  var gradeLine=st.bite?'D \u2014 Severe concern(s) (bite recorded)':st.complete?gradeFromTotal(st.total).letter+' \u2014 '+gradeFromTotal(st.total).label:'Incomplete ('+st.scored+' of 4)';
+  n+='RESIDUAL FEAR SCORE: '+st.total+' / 80'+sep;
+  n+='GRADE: '+gradeLine+sep+sep;
+  n+='DOMAIN SCORES:'+sep;
+  var names={A:'Kennel presence',B:'Eating / social interaction',C:'Leashing',D:'Consent testing'};
+  DOMAINS.forEach(function(L){var s=st.picks[L];n+='\u2022 '+names[L]+': '+(s?s.score+' \u2014 '+s.label:'not scored')+sep;});
+  n+=sep;
+  var anyFlag=st.bite||(cL.length&&daysNum!==null&&daysNum>7);
+  if(anyFlag){
+    n+='FLAGS:'+sep;
+    if(st.bite) n+='\u26D4 Bite / attempt to bite \u2014 behaviour vet review'+sep;
+    if(cL.length&&daysNum!==null&&daysNum>7) n+='\u26A0 Concerning behaviour beyond day 7 \u2014 discuss with behaviour team and behaviour vet'+sep;
+    n+=sep;
+  }
+  n+='Scoring: 5 = best achievable, 80 = most fearful.'+sep;
+  n+='\u2014 RSPCA Victoria Behaviour Program | Fearful Dog Desensitisation Assessment';
+  return n;
+}
+
+var _lastNote='';
+function copyText(text){
+  return new Promise(function(resolve,reject){
+    if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(text).then(resolve,function(){fallbackCopy(text,resolve,reject);});}
+    else{fallbackCopy(text,resolve,reject);}
+  });
+}
+function fallbackCopy(text,resolve,reject){
+  try{var ta=document.createElement('textarea');ta.value=text;ta.setAttribute('readonly','');ta.style.position='fixed';ta.style.top='0';ta.style.left='0';ta.style.opacity='0';document.body.appendChild(ta);ta.focus();ta.select();try{ta.setSelectionRange(0,text.length);}catch(e){}var ok=document.execCommand('copy');document.body.removeChild(ta);if(ok)resolve();else reject();}catch(e){reject();}
+}
+function flashBtn(btn,msg){if(!btn)return;var orig=btn.textContent;btn.textContent=msg;setTimeout(function(){btn.textContent=orig;},2500);}
+function generateNote(){var note=buildNote();if(!note)return;_lastNote=note;var prev=document.getElementById('note-preview');prev.textContent=note;prev.style.display='block';prev.scrollIntoView({behavior:'smooth',block:'nearest'});}
+function copyNote(){if(!_lastNote){generateNote();if(!_lastNote)return;}var b=document.getElementById('copy-btn');copyText(_lastNote).then(function(){flashBtn(b,'\u2713 Copied to clipboard');},function(){var prev=document.getElementById('note-preview');prev.textContent=_lastNote;prev.style.display='block';prev.scrollIntoView({behavior:'smooth',block:'nearest'});flashBtn(b,'Select the note above to copy');});}
+function shareToTeams(){if(!_lastNote){generateNote();if(!_lastNote)return;}var b=document.querySelector('.btn-teams');copyText(_lastNote).then(function(){flashBtn(b,'\u2713 Note copied \u2014 opening Teams, then paste');window.location.href='msteams://';},function(){flashBtn(b,'Opening Teams \u2014 copy note first');window.location.href='msteams://';});}
+function shareNote(){if(!_lastNote){generateNote();if(!_lastNote)return;}if(navigator.share){navigator.share({text:_lastNote}).catch(function(){});}else{copyNote();}}
+function clearAll(){
+  if(!confirm('Clear all fields and start again?')) return;
+  document.querySelectorAll('.finput').forEach(function(e){e.value='';});
+  document.querySelectorAll('input[type=radio],input[type=checkbox]').forEach(function(e){e.checked=false;});
+  document.getElementById('note-preview').style.display='none';
+  document.getElementById('def-panel').classList.remove('open');
+  document.getElementById('def-toggle').innerHTML='&#x25B6; Show definitions';
+  _lastNote='';
+  var now=new Date(); document.getElementById('adate').value=now.toISOString().split('T')[0];
+  updateDays(); refresh();
+}
+
+// ---- Init ----
+(function(){
+  var now=new Date();
+  document.getElementById('adate').value=now.toISOString().split('T')[0];
+  updateDays();
+  refresh();
+})();
+</script>
+</body>
+</html>
