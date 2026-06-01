@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BMOD Reassessment — RSPCA Victoria</title>
+<style>
+:root{
+  --bg:#FAFAF7;--bg2:#F0EFE8;--bg3:#E8E7E0;
+  --card:#FFFFFF;--text:#1A1A18;--text2:#5A5956;--text3:#9A9890;
+  --border:rgba(0,0,0,0.11);--accent:#1D4ED8;
+  --r:10px;--font:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+  --danger-bg:#FCEBEB;--danger-border:#A32D2D;--danger-text:#5C1010;
+  --tip-bg:#EAF3DE;--tip-border:#27500A;--tip-text:#1A3306;
+  --warn-bg:#FAEEDA;--warn-border:#854F0B;--warn-text:#4A2800;
+}
+@media(prefers-color-scheme:dark){:root{
+  --bg:#141412;--bg2:#1E1E1C;--bg3:#252523;
+  --card:#1E1E1C;--text:#F5F4F0;--text2:#CCCAC4;--text3:#9A9892;
+  --border:rgba(255,255,255,0.13);
+  --danger-bg:#3A0A0A;--danger-border:#C04040;--danger-text:#F09090;
+  --tip-bg:#0F2800;--tip-border:#5AAA20;--tip-text:#90D060;
+  --warn-bg:#3D2000;--warn-border:#C07A20;--warn-text:#F0C070;
+}}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{-webkit-text-size-adjust:100%;}
+body{font-family:var(--font);background:var(--bg);color:var(--text);padding:.75rem .9rem 3rem;font-size:15px;line-height:1.6;}
+.wrap{max-width:700px;margin:0 auto;}
+
+/* Header */
+.hdr{padding:.5rem 0 1.25rem;}
+.hdr-tag{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;background:#EDE9FE;color:#5B21B6;padding:3px 10px;border-radius:20px;margin-bottom:.6rem;}
+@media(prefers-color-scheme:dark){.hdr-tag{background:#2E1065;color:#C4B5FD;}}
+.hdr h1{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-bottom:.3rem;}
+.hdr p{font-size:13px;color:var(--text2);}
+
+/* Sections */
+.fsec{background:var(--card);border:.5px solid var(--border);border-radius:var(--r);margin:10px 0;overflow:hidden;}
+.fsec-hdr{padding:12px 16px 10px;border-bottom:.5px solid var(--border);}
+.fsec-hdr h2{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);}
+.fsec-body{padding:14px 16px;}
+
+/* Fields */
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:8px 0;}
+.frow3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin:8px 0;}
+.fgroup{margin:8px 0;}
+.flabel{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text3);display:block;margin-bottom:5px;}
+.finput,.fselect,.ftextarea{width:100%;padding:10px 12px;font-size:16px;font-family:var(--font);border:.5px solid var(--border);border-radius:8px;background:var(--bg2);color:var(--text);-webkit-appearance:none;appearance:none;}
+.finput:focus,.fselect:focus,.ftextarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 2px rgba(29,78,216,.15);}
+.ftextarea{min-height:100px;resize:vertical;line-height:1.55;}
+.fnum{max-width:100px;}
+
+/* Checkboxes */
+.chk-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px 12px;margin:4px 0;}
+.chk-grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:2px 10px;margin:4px 0;}
+.chk-item{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--text2);padding:5px 0;cursor:pointer;line-height:1.3;}
+.chk-item input{width:17px;height:17px;flex-shrink:0;accent-color:var(--accent);cursor:pointer;}
+
+/* Goals review */
+.goal-review-item{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:.5px solid var(--border);gap:10px;flex-wrap:wrap;}
+.goal-review-item:last-child{border-bottom:none;}
+.goal-review-label{font-size:14px;color:var(--text2);flex:1;min-width:120px;}
+.goal-btns{display:flex;gap:4px;flex-shrink:0;}
+.goal-btn{padding:5px 10px;font-size:12px;font-weight:600;border:.5px solid var(--border);border-radius:6px;background:var(--bg2);color:var(--text2);cursor:pointer;font-family:var(--font);transition:all .15s;}
+.goal-btn.sel-achieved{background:#D1FAE5;border-color:#16A34A;color:#14532D;}
+.goal-btn.sel-partial{background:#FEF3C7;border-color:#D97706;color:#78350F;}
+.goal-btn.sel-not{background:#FEE2E2;border-color:#DC2626;color:#7F1D1D;}
+@media(prefers-color-scheme:dark){
+.goal-btn.sel-achieved{background:#064E3B;border-color:#16A34A;color:#6EE7B7;}
+.goal-btn.sel-partial{background:#451A03;border-color:#D97706;color:#FDE68A;}
+.goal-btn.sel-not{background:#450A0A;border-color:#DC2626;color:#FCA5A5;}
+}
+.goal-review-empty{font-size:13px;color:var(--text3);font-style:italic;padding:8px 0;}
+
+/* Alert */
+.alert{border-radius:8px;padding:10px 14px;margin:8px 0;border-left:3px solid;font-size:13px;line-height:1.55;}
+.alert strong{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.04em;margin-bottom:3px;}
+.tip{background:var(--tip-bg);border-color:var(--tip-border);color:var(--tip-text);}
+.warn{background:var(--warn-bg);border-color:var(--warn-border);color:var(--warn-text);}
+
+/* Preview */
+.preview{background:var(--bg2);border:.5px solid var(--border);border-radius:var(--r);padding:14px 16px;font-size:13px;font-family:monospace;line-height:1.65;white-space:pre-wrap;margin:10px 0;display:none;color:var(--text2);max-height:400px;overflow-y:auto;}
+
+/* Buttons */
+.btn{width:100%;padding:14px;font-size:15px;font-weight:700;border:none;border-radius:var(--r);cursor:pointer;margin:5px 0;font-family:var(--font);transition:opacity .15s;letter-spacing:.01em;}
+.btn:hover{opacity:.88;}
+.btn-primary{background:var(--accent);color:#fff;}
+.btn-teams{background:#5558AF;color:#fff;}
+.btn-copy{background:var(--bg2);color:var(--text);border:.5px solid var(--border);}
+.btn-clear{background:transparent;color:var(--text3);font-size:13px;padding:8px;border:none;cursor:pointer;font-family:var(--font);display:block;margin:4px auto;}
+.btn-divider{height:.5px;background:var(--border);margin:12px 0;}
+
+/* Score chips */
+.score-chip{display:inline-block;padding:3px 10px;border-radius:20px;font-size:12px;font-weight:700;margin:2px;}
+
+/* Footer */
+.foot{text-align:center;font-size:12px;color:var(--text3);margin-top:2rem;line-height:1.6;}
+
+@media(min-width:580px){
+  body{padding:1.25rem 1.5rem 3rem;}
+  .fsec-body{padding:16px 20px;}
+  .fsec-hdr{padding:14px 20px 12px;}
+}
+/* Tabs */
+.tabbar{display:flex;gap:6px;background:var(--card);border:.5px solid var(--border);border-radius:var(--r);padding:5px;margin-bottom:14px;position:sticky;top:0;z-index:10;}
+.tab-btn{flex:1;padding:11px 8px;font-size:14px;font-weight:600;border:none;border-radius:8px;background:transparent;color:var(--text2);cursor:pointer;font-family:var(--font);transition:background .15s,color .15s;}
+.tab-btn.active{background:var(--accent);color:#fff;}
+.tab-btn:not(.active):hover{background:var(--bg2);color:var(--text);}
+.tab-pane{animation:fadeIn .2s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
+/* Modal */
+.modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;z-index:100;padding:1rem;}
+.modal-box{background:var(--card);border-radius:var(--r);max-width:420px;width:100%;padding:24px;box-shadow:0 20px 60px rgba(0,0,0,.4);}
+.modal-tag{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;background:var(--accent);color:#fff;padding:3px 10px;border-radius:20px;margin-bottom:10px;}
+.modal-title{font-size:18px;font-weight:700;margin-bottom:8px;line-height:1.3;}
+.modal-text{font-size:14px;color:var(--text2);line-height:1.55;margin-bottom:18px;}
+.modal-btn{width:100%;padding:12px;font-size:14px;font-weight:700;border:none;border-radius:8px;background:var(--accent);color:#fff;cursor:pointer;font-family:var(--font);}
+.modal-btn:hover{opacity:.9;}
+/* Care plan widgets */
+.cp-prob-grid{display:grid;grid-template-columns:1fr;gap:4px;}
+.cp-prob-item{display:flex;align-items:flex-start;gap:9px;padding:9px 11px;border:.5px solid var(--border);border-radius:8px;background:var(--bg2);cursor:pointer;font-size:14px;color:var(--text);transition:border-color .12s,background .12s;}
+.cp-prob-item:hover{border-color:var(--accent);}
+.cp-prob-item input{margin-top:2px;width:17px;height:17px;flex-shrink:0;accent-color:var(--accent);cursor:pointer;}
+.cp-prob-item.checked{border-color:var(--accent);background:rgba(29,78,216,.06);}
+.cp-prob-item .note{font-size:11px;color:var(--text3);display:block;margin-top:2px;font-style:italic;font-weight:400;}
+.cp-goal-grid{display:grid;grid-template-columns:1fr;gap:6px;}
+@media(min-width:520px){.cp-goal-grid{grid-template-columns:1fr 1fr;}}
+.cp-goal-item{display:flex;align-items:flex-start;gap:8px;padding:7px 10px;font-size:13px;color:var(--text);cursor:pointer;}
+.cp-goal-item input{margin-top:1px;width:16px;height:16px;flex-shrink:0;accent-color:var(--accent);cursor:pointer;}
+.cp-task-group{margin:14px 0;}
+.cp-task-group-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);padding-bottom:6px;border-bottom:.5px solid var(--border);margin-bottom:8px;}
+.cp-task-item{display:flex;align-items:flex-start;gap:10px;padding:9px 11px;border:.5px solid var(--border);border-radius:8px;background:var(--card);margin:5px 0;cursor:pointer;transition:border-color .12s,background .12s;}
+.cp-task-item:hover{border-color:var(--accent);}
+.cp-task-item input{margin-top:2px;width:17px;height:17px;flex-shrink:0;accent-color:var(--accent);cursor:pointer;}
+.cp-task-item.checked{border-color:var(--accent);background:rgba(29,78,216,.04);}
+.cp-task-body{flex:1;font-size:13px;line-height:1.45;color:var(--text);font-weight:600;}
+.cp-task-desc{font-size:12px;color:var(--text2);margin-top:3px;line-height:1.45;font-weight:400;display:block;}
+.cp-task-item .suggested-badge{display:none;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:2px 7px;border-radius:20px;background:#FEF3C7;color:#92400E;align-self:flex-start;margin-top:2px;flex-shrink:0;}
+.cp-task-item.suggested .suggested-badge{display:inline-block;}
+@media(prefers-color-scheme:dark){.cp-task-item .suggested-badge{background:#451A03;color:#FDE68A;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="hdr">
+  <span class="hdr-tag">Behaviour Program</span>
+  <h1>BMOD Reassessment</h1>
+  <p>Fortnightly behavioural modification reassessment &bull; RSPCA Victoria &bull; Vet AA use</p>
+</div>
+
+<div class="tabbar">
+  <button class="tab-btn active" data-tab="reassessment" onclick="switchTab('reassessment')">Fortnightly reassessment</button>
+  <button class="tab-btn" data-tab="careplan" onclick="switchTab('careplan')">Care plan</button>
+</div>
+
+<div id="tab-reassessment" class="tab-pane">
+
+<!-- 1. PATIENT -->
+<div class="fsec">
+  <div class="fsec-hdr"><h2>1 &mdash; Patient</h2></div>
+  <div class="fsec-body">
+    <div class="frow">
+      <div class="fgroup"><label class="flabel" for="shnum">ShelterMate #</label><input type="text" id="shnum" class="finput" placeholder="e.g. 12345" inputmode="numeric"></div>
+      <div class="fgroup"><label class="flabel" for="dogname">Dog name</label><input type="text" id="dogname" class="finput" placeholder="e.g. Lonnie"></div>
+    </div>
+    <div class="frow">
+      <div class="fgroup"><label class="flabel" for="adate">Assessment date</label><input type="date" id="adate" class="finput"></div>
+      <div class="fgroup"><label class="flabel" for="handler">Vet AA name</label><input type="text" id="handler" class="finput" placeholder="Your name"></div>
+    </div>
+    <div class="frow">
+      <div class="fgroup"><label class="flabel" for="nsessions">BMOD sessions (past 2 wks)</label><input type="number" id="nsessions" class="finput fnum" min="0" max="20" placeholder="0"></div>
+      <div class="fgroup"><label class="flabel" for="nextreview">Next review date</label><input type="date" id="nextreview" class="finput"></div>
+    </div>
+  </div>
+</div>
+
+<!-- 2. BEHAVIOUR PROBLEM LIST -->
+<div class="fsec">
+  <div class="fsec-hdr"><h2>2 &mdash; Behaviour problem list</h2></div>
+  <div class="fsec-body">
+    <div class="chk-grid">
+      <label class="chk-item"><input type="checkbox" class="prob-chk" data-label="Kennel stress"> Kennel stress</label>
+      <label class="chk-item"><input type="checkbox" class="prob-chk" data-label="Hyperarousal (mouthiness, lead grabbing, or height seeking)"> Hyperarousal (mouthing, lead grabbing, height seeking)</label>
+      <label class="chk-item"><input type="checkbox" class="prob-chk" data-label="Fear towards people"> Fear towards people</label>
+      <label class="chk-item"><input type="checkbox" class="prob-chk" data-label="Fear towards dogs"> Fear towards dogs</label>
+      <label class="chk-item"><input type="checkbox" class="prob-chk" data-label="Dog-dog interactions / reactivity on lead"> Dog-dog reactivity</label>
+      <label class="chk-item"><input type="checkbox" class="prob-chk" data-label="Generalised anxiety"> Generalised anxiety</label>
+      <label class="chk-item"><input type="checkbox" class="prob-chk" data-label="Prey drive"> Prey drive</label>
+      <label class="chk-item"><input type="checkbox" class="prob-chk" data-label="Resource guarding"> Resource guarding</label>
+      <label class="chk-item"><input type="checkbox" class="prob-chk" data-label="Limited socialisation"> Limited socialisation</label>
+      <label class="chk-item"><input type="checkbox" class="prob-chk" data-label="Fear of novel objects or environments"> Fear of novel objects/environments</label>
+      <label class="chk-item"><input type="checkbox" class="prob-chk" data-label="Separation anxiety"> Separation anxiety</label>
+      <label class="chk-item"><input type="checkbox" class="prob-chk" data-label="Excessive vocalisation"> Excessive vocalisation</label>
+      <label class="chk-item"><input type="checkbox" class="prob-chk" data-label="Cooperative handling (muzzle, eye/ear treatment, injection)"> Cooperative handling</label>
+    </div>
+    <div class="fgroup" style="margin-top:8px">
+      <label class="flabel" for="prob-other">Other (free text)</label>
+      <input type="text" id="prob-other" class="finput" placeholder="Add any additional problems not listed above">
+    </div>
+  </div>
+</div>
+
+<!-- 3. CURRENT SCORE -->
+<div class="fsec">
+  <div class="fsec-hdr"><h2>3 &mdash; Current score</h2></div>
+  <div class="fsec-body">
+    <div class="frow">
+      <div class="fgroup">
+        <label class="flabel" for="fear-score">Fear score (FAS)</label>
+        <select id="fear-score" class="fselect">
+          <option value="">&#8212; Select &#8212;</option>
+          <option value="&#x1F7E2; Neutral">&#x1F7E2; Neutral</option>
+          <option value="&#x1F7E1; Mild fear">&#x1F7E1; Mild fear</option>
+          <option value="&#x1F7E0; Moderate fear">&#x1F7E0; Moderate fear</option>
+          <option value="&#x1F534; Severe fear">&#x1F534; Severe fear</option>
+        </select>
+      </div>
+      <div class="fgroup">
+        <label class="flabel" for="arousal-score">Arousal score</label>
+        <select id="arousal-score" class="fselect">
+          <option value="">&#8212; Select &#8212;</option>
+          <option value="&#x1F7E2; Neutral">&#x1F7E2; Neutral</option>
+          <option value="&#x1F7E1; Mild arousal">&#x1F7E1; Mild arousal</option>
+          <option value="&#x1F7E0; Moderate arousal">&#x1F7E0; Moderate arousal</option>
+          <option value="&#x1F534; Severe arousal">&#x1F534; Severe arousal</option>
+        </select>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 4. GOALS -->
+<div class="fsec">
+  <div class="fsec-hdr"><h2>4 &mdash; Goals for this period</h2></div>
+  <div class="fsec-body">
+    <p style="font-size:13px;color:var(--text2);margin-bottom:10px">Select all goals worked toward this fortnight. Progress review appears in Section 7.</p>
+    <div class="chk-grid">
+      <label class="chk-item"><input type="checkbox" class="goal-chk" data-label="Reduce kennel stress" onchange="updateGoalReview()"> Reduce kennel stress</label>
+      <label class="chk-item"><input type="checkbox" class="goal-chk" data-label="Reduce arousal and height seeking" onchange="updateGoalReview()"> Reduce arousal / height seeking</label>
+      <label class="chk-item"><input type="checkbox" class="goal-chk" data-label="Build confidence around people" onchange="updateGoalReview()"> Confidence — people</label>
+      <label class="chk-item"><input type="checkbox" class="goal-chk" data-label="Build confidence in new environments" onchange="updateGoalReview()"> Confidence — environments</label>
+      <label class="chk-item"><input type="checkbox" class="goal-chk" data-label="Improve lead manners" onchange="updateGoalReview()"> Lead manners</label>
+      <label class="chk-item"><input type="checkbox" class="goal-chk" data-label="Foundation training (Sit, Drop, Look, Touch)" onchange="updateGoalReview()"> Foundation training</label>
+      <label class="chk-item"><input type="checkbox" class="goal-chk" data-label="Slip lead tolerance" onchange="updateGoalReview()"> Slip lead tolerance</label>
+      <label class="chk-item"><input type="checkbox" class="goal-chk" data-label="Muzzle training" onchange="updateGoalReview()"> Muzzle training</label>
+      <label class="chk-item"><input type="checkbox" class="goal-chk" data-label="Dog-dog interaction exposure" onchange="updateGoalReview()"> Dog-dog exposure</label>
+      <label class="chk-item"><input type="checkbox" class="goal-chk" data-label="YES for Calm protocol" onchange="updateGoalReview()"> YES for Calm</label>
+      <label class="chk-item"><input type="checkbox" class="goal-chk" data-label="Distance testing" onchange="updateGoalReview()"> Distance testing</label>
+      <label class="chk-item"><input type="checkbox" class="goal-chk" data-label="Consent testing" onchange="updateGoalReview()"> Consent testing</label>
+      <label class="chk-item"><input type="checkbox" class="goal-chk" data-label="Fear of touch DS/CC" onchange="updateGoalReview()"> Fear of touch DS/CC</label>
+    </div>
+    <div class="fgroup" style="margin-top:8px">
+      <label class="flabel" for="goal-other">Other goal (free text)</label>
+      <input type="text" id="goal-other" class="finput" placeholder="Any additional goal not listed above">
+    </div>
+  </div>
+</div>
+
+<!-- 5. KNOWN CUES -->
+<div class="fsec">
+  <div class="fsec-hdr"><h2>5 &mdash; Known cues</h2></div>
+  <div class="fsec-body">
+    <div class="chk-grid3">
+      <label class="chk-item"><input type="checkbox" class="cue-chk" data-label="Sit"> Sit</label>
+      <label class="chk-item"><input type="checkbox" class="cue-chk" data-label="Drop"> Drop</label>
+      <label class="chk-item"><input type="checkbox" class="cue-chk" data-label="Look"> Look</label>
+      <label class="chk-item"><input type="checkbox" class="cue-chk" data-label="Touch"> Touch</label>
+      <label class="chk-item"><input type="checkbox" class="cue-chk" data-label="Go Find"> Go Find</label>
+      <label class="chk-item"><input type="checkbox" class="cue-chk" data-label="Mat"> Mat</label>
+      <label class="chk-item"><input type="checkbox" class="cue-chk" data-label="Crate"> Crate</label>
+      <label class="chk-item"><input type="checkbox" class="cue-chk" data-label="Play"> Play</label>
+      <label class="chk-item"><input type="checkbox" class="cue-chk" data-label="Ta"> Ta</label>
+      <label class="chk-item"><input type="checkbox" class="cue-chk" data-label="Finish"> Finish</label>
+      <label class="chk-item"><input type="checkbox" class="cue-chk" data-label="Toilet-Toilet"> Toilet</label>
+    </div>
+  </div>
+</div>
+
+<!-- 6. BEHAVIOURAL OBSERVATION -->
+<div class="fsec">
+  <div class="fsec-hdr"><h2>6 &mdash; Behavioural observation</h2></div>
+  <div class="fsec-body">
+    <div class="fgroup">
+      <label class="flabel" for="observation">Observation narrative</label>
+      <textarea id="observation" class="ftextarea" style="min-height:130px" placeholder="Describe what you observed during this assessment period. Include context (location, time of day, triggers present), specific behaviours, and any notable changes from the previous assessment."></textarea>
+      <p style="font-size:12px;color:var(--text3);margin-top:6px">&#x1F4A1; Tip: use your keyboard&#39;s built-in dictation &mdash; <strong>iPhone:</strong> tap the microphone on the keyboard &bull; <strong>Android:</strong> tap the microphone on the Gboard keyboard &bull; <strong>Mac:</strong> press Fn twice &bull; <strong>Windows:</strong> press Win&nbsp;+&nbsp;H</p>
+
+    </div>
+  </div>
+</div>
+
+<!-- 7. GOALS REVIEW -->
+<div class="fsec">
+  <div class="fsec-hdr"><h2>7 &mdash; Goals review</h2></div>
+  <div class="fsec-body">
+    <p style="font-size:13px;color:var(--text2);margin-bottom:10px">Select progress for each goal. Goals populate from Section 5.</p>
+    <div id="goal-review-list">
+      <p class="goal-review-empty">Select goals in Section 5 to review progress here.</p>
+    </div>
+  </div>
+</div>
+
+<!-- 8. ACTION PLAN -->
+<div class="fsec">
+  <div class="fsec-hdr"><h2>8 &mdash; Action plan</h2></div>
+  <div class="fsec-body">
+    <label class="flabel">Next steps to focus on</label>
+    <div class="chk-grid">
+      <label class="chk-item"><input type="checkbox" class="next-chk" data-label="Continue YES for Calm (4 paws on floor)"> YES for Calm</label>
+      <label class="chk-item"><input type="checkbox" class="next-chk" data-label="Continue distance testing"> Distance testing</label>
+      <label class="chk-item"><input type="checkbox" class="next-chk" data-label="Progress to consent testing"> Consent testing</label>
+      <label class="chk-item"><input type="checkbox" class="next-chk" data-label="Progress to slip lead"> Slip lead</label>
+      <label class="chk-item"><input type="checkbox" class="next-chk" data-label="Continue fear of touch DS/CC"> Fear of touch DS/CC</label>
+      <label class="chk-item"><input type="checkbox" class="next-chk" data-label="Continue foundation behaviours"> Foundation behaviours</label>
+      <label class="chk-item"><input type="checkbox" class="next-chk" data-label="Harness fitting and slip lead training"> Harness fitting / slip lead</label>
+      <label class="chk-item"><input type="checkbox" class="next-chk" data-label="Increase exposure to people"> Exposure to people</label>
+      <label class="chk-item"><input type="checkbox" class="next-chk" data-label="DS/CC to dogs (Look, Touch, Go Find training)"> DS/CC to dogs</label>
+      <label class="chk-item"><input type="checkbox" class="next-chk" data-label="Superbowl training"> Superbowl training</label>
+      <label class="chk-item"><input type="checkbox" class="next-chk" data-label="Mat / crate training"> Mat / crate training</label>
+      <label class="chk-item"><input type="checkbox" class="next-chk" data-label="Tug-of-war impulse control training"> Tug-of-war impulse control</label>
+      <label class="chk-item"><input type="checkbox" class="next-chk" data-label="Continue enrichment program"> Enrichment program</label>
+      <label class="chk-item"><input type="checkbox" class="next-chk" data-label="Escalate to vet behaviour review"> Escalate to vet review</label>
+    </div>
+    <div class="fgroup" style="margin-top:8px">
+      <label class="flabel" for="next-other">Additional notes / other action</label>
+      <input type="text" id="next-other" class="finput" placeholder="Any additional plan items">
+    </div>
+    <div class="frow" style="margin-top:12px">
+      <div class="fgroup">
+        <label class="flabel" for="pathway">Pathway</label>
+        <select id="pathway" class="fselect">
+          <option value="">&#8212; Select &#8212;</option>
+          <option>Continue in current location</option>
+          <option>Move to adoptions</option>
+          <option>Ready for adoption</option>
+          <option>Move to foster care</option>
+          <option>Requires vet behaviour assessment</option>
+          <option>Consider medication adjustment</option>
+          <option>Escalate — contact behaviour vet</option>
+        </select>
+      </div>
+      <div class="fgroup">
+        <label class="flabel" for="revisit">Revisit date</label>
+        <input type="date" id="revisit" class="finput">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 9. GENERATE -->
+<div class="fsec">
+  <div class="fsec-hdr"><h2>9 &mdash; Generate note</h2></div>
+  <div class="fsec-body">
+    <div class="alert tip"><strong>How this works</strong>Click Generate to preview your note. Copy for ShelterBuddy gives plain text ready to paste into ezyVet or ShelterBuddy. Share sends to Teams or any other app.</div>
+    <div id="note-preview" class="preview"></div>
+    <div class="btn-divider"></div>
+    <button class="btn btn-primary" onclick="generateNote()">&#x2699;&#xFE0F; Generate note</button>
+    <button class="btn btn-teams" onclick="shareToTeams()">&#x1F4AC; Share to Microsoft Teams</button>
+    <button class="btn btn-copy" id="copy-btn" onclick="copyNote()">&#x1F4CB; Copy for ShelterBuddy / ezyVet</button>
+    <button class="btn btn-copy" onclick="shareNote()">&#x1F4E4; Share via phone (WhatsApp / Messages)</button>
+    <button class="btn-clear" onclick="clearAll()">&#10006; Clear all fields</button>
+  </div>
+</div>
+
+<div class="foot">
+  BMOD Reassessment &bull; RSPCA Victoria Behaviour Program &bull; Prepared by Dr Juliana Xue<br>
+  For clinical decisions always consult the behaviour veterinarian.
+</div>
+
+</div><!-- /tab-reassessment -->
+
+<div id="tab-careplan" class="tab-pane" style="display:none">
+
+<!-- CP 1. PATIENT -->
+<div class="fsec">
+  <div class="fsec-hdr"><h2>1 &mdash; Patient &amp; plan</h2></div>
+  <div class="fsec-body">
+    <div class="frow">
+      <div class="fgroup"><label class="flabel" for="cp-shnum">ShelterMate #</label><input type="text" id="cp-shnum" class="finput" placeholder="e.g. 12345" inputmode="numeric"></div>
+      <div class="fgroup"><label class="flabel" for="cp-dogname">Dog name</label><input type="text" id="cp-dogname" class="finput" placeholder="e.g. Lonnie"></div>
+    </div>
+    <div class="frow">
+      <div class="fgroup"><label class="flabel" for="cp-pdate">Plan date</label><input type="date" id="cp-pdate" class="finput"></div>
+      <div class="fgroup"><label class="flabel" for="cp-revdate">Next review</label><input type="date" id="cp-revdate" class="finput"></div>
+    </div>
+    <div class="fgroup"><label class="flabel" for="cp-handler">Handler / lead Vet AA</label><input type="text" id="cp-handler" class="finput" placeholder="Your name"></div>
+  </div>
+</div>
+
+<!-- CP 2. CURRENT PROBLEMS -->
+<div class="fsec">
+  <div class="fsec-hdr"><h2>2 &mdash; Current problems</h2><span class="sub">Tick all that apply. Suggested tasks will appear in section 4.</span></div>
+  <div class="fsec-body">
+    <div class="cp-prob-grid">
+      <label class="cp-prob-item"><input type="checkbox" class="cp-prob" data-prob="kennel" data-label="Kennel stress"> <span>Kennel stress</span></label>
+      <label class="cp-prob-item"><input type="checkbox" class="cp-prob" data-prob="shutdown" data-label="Shut down in kennel"> <span>Shut down in kennel</span></label>
+      <label class="cp-prob-item"><input type="checkbox" class="cp-prob" data-prob="arousal" data-label="Hyperarousal"> <span>Hyperarousal</span></label>
+      <label class="cp-prob-item"><input type="checkbox" class="cp-prob" data-prob="people" data-label="Fear towards people"> <span>Fear towards people</span></label>
+      <label class="cp-prob-item"><input type="checkbox" class="cp-prob" data-prob="dogs" data-label="Fear towards dogs / dog reactivity (fear-based)"> <span>Fear towards dogs / dog reactivity (fear-based)</span></label>
+      <label class="cp-prob-item"><input type="checkbox" class="cp-prob" data-prob="anxiety" data-label="Generalised anxiety"> <span>Generalised anxiety</span></label>
+      <label class="cp-prob-item"><input type="checkbox" class="cp-prob" data-prob="prey" data-label="Prey drive"> <span>Prey drive</span></label>
+      <label class="cp-prob-item"><input type="checkbox" class="cp-prob" data-prob="rg" data-label="Resource guarding"> <span>Resource guarding<span class="note">Documented only &mdash; no tasks generated</span></span></label>
+      <label class="cp-prob-item"><input type="checkbox" class="cp-prob" data-prob="soc" data-label="Limited socialisation"> <span>Limited socialisation</span></label>
+      <label class="cp-prob-item"><input type="checkbox" class="cp-prob" data-prob="novel" data-label="Fear of novel objects / new environments"> <span>Fear of novel objects / new environments</span></label>
+      <label class="cp-prob-item"><input type="checkbox" class="cp-prob" data-prob="separation" data-label="Separation related problems"> <span>Separation related problems</span></label>
+      <label class="cp-prob-item"><input type="checkbox" class="cp-prob" data-prob="vocal" data-label="Excessive vocalisation"> <span>Excessive vocalisation<span class="note">Documented only &mdash; no tasks generated</span></span></label>
+      <label class="cp-prob-item"><input type="checkbox" class="cp-prob" data-prob="coop" data-label="Cooperative handling"> <span>Cooperative handling</span></label>
+    </div>
+    <div class="fgroup" style="margin-top:12px"><label class="flabel" for="cp-prob-other">Other problem (optional)</label><input type="text" id="cp-prob-other" class="finput" placeholder="Add any problem not listed above"></div>
+  </div>
+</div>
+
+<!-- CP 3. GOALS -->
+<div class="fsec">
+  <div class="fsec-hdr"><h2>3 &mdash; Goals for the fortnight</h2><span class="sub">Tick the outcomes targeted by this plan</span></div>
+  <div class="fsec-body">
+    <div class="cp-goal-grid">
+      <label class="cp-goal-item"><input type="checkbox" class="cp-goal" data-label="Reduce kennel stress"> Reduce kennel stress</label>
+      <label class="cp-goal-item"><input type="checkbox" class="cp-goal" data-label="Build confidence"> Build confidence</label>
+      <label class="cp-goal-item"><input type="checkbox" class="cp-goal" data-label="Build trust / bond with handlers"> Build trust / bond with handlers</label>
+      <label class="cp-goal-item"><input type="checkbox" class="cp-goal" data-label="Reduce fear of people"> Reduce fear of people</label>
+      <label class="cp-goal-item"><input type="checkbox" class="cp-goal" data-label="Reduce fear / reactivity to dogs"> Reduce fear / reactivity to dogs</label>
+      <label class="cp-goal-item"><input type="checkbox" class="cp-goal" data-label="Improve handling tolerance"> Improve handling tolerance</label>
+      <label class="cp-goal-item"><input type="checkbox" class="cp-goal" data-label="Regulate arousal / build calmness"> Regulate arousal / build calmness</label>
+      <label class="cp-goal-item"><input type="checkbox" class="cp-goal" data-label="Cope with novelty / new environments"> Cope with novelty / new environments</label>
+      <label class="cp-goal-item"><input type="checkbox" class="cp-goal" data-label="Reduce separation-related distress"> Reduce separation-related distress</label>
+    </div>
+    <div class="fgroup" style="margin-top:12px"><label class="flabel" for="cp-goal-other">Other goal (optional)</label><input type="text" id="cp-goal-other" class="finput" placeholder="Add any goal not listed above"></div>
+  </div>
+</div>
+
+<!-- CP 4. TASKS -->
+<div class="fsec">
+  <div class="fsec-hdr"><h2>4 &mdash; Tasks</h2><span class="sub">Tasks matching ticked problems get a Suggested badge and are pre-ticked. Adjust as needed.</span></div>
+  <div class="fsec-body">
+
+    <div class="cp-task-group">
+      <div class="cp-task-group-title">Decompression &amp; housing</div>
+      <label class="cp-task-item"><input type="checkbox" class="cp-task" data-task="Quiet kennel placement" data-applies="kennel"><span class="cp-task-body">Quiet kennel placement<span class="cp-task-desc">Locate the dog in a low-traffic, low-noise area of the kennel block.</span></span><span class="suggested-badge">Suggested</span></label>
+      <label class="cp-task-item"><input type="checkbox" class="cp-task" data-task="Visual barrier on kennel front" data-applies="kennel"><span class="cp-task-body">Visual barrier on kennel front<span class="cp-task-desc">Reduce visual stimulation by partially or fully covering the kennel front (for example with a sheet).</span></span><span class="suggested-badge">Suggested</span></label>
+      <label class="cp-task-item"><input type="checkbox" class="cp-task" data-task="Hide / covered crate in kennel" data-applies="kennel"><span class="cp-task-body">Hide / covered crate in kennel<span class="cp-task-desc">Provide a covered crate or den space inside the kennel for the dog to retreat to.</span></span><span class="suggested-badge">Suggested</span></label>
+      <label class="cp-task-item"><input type="checkbox" class="cp-task" data-task="Predictable daily routine" data-applies="kennel"><span class="cp-task-body">Predictable daily routine<span class="cp-task-desc">Keep feeding, walks, training, and quiet times at consistent times each day.</span></span><span class="suggested-badge">Suggested</span></label>
+    </div>
+
+    <div class="cp-task-group">
+      <div class="cp-task-group-title">Fear protocol &amp; bonding</div>
+      <label class="cp-task-item"><input type="checkbox" class="cp-task" data-task="Commence fear protocol" data-applies="shutdown,people,soc,anxiety"><span class="cp-task-body">Commence fear protocol<span class="cp-task-desc">Follow the Fearful Dogs guide: considered approach, distance testing, consent testing, DS/CC.</span></span><span class="suggested-badge">Suggested</span></label>
+      <label class="cp-task-item"><input type="checkbox" class="cp-task" data-task="Evaluate whether safe to bring into behaviour room" data-applies="shutdown"><span class="cp-task-body">Evaluate whether safe to bring into behaviour room<span class="cp-task-desc">Handler to assess each session whether moving the dog into the behaviour room is safe and appropriate, to allow better engagement and lower stress.</span></span><span class="suggested-badge">Suggested</span></label>
+      <label class="cp-task-item"><input type="checkbox" class="cp-task" data-task="Allow bonding with particular handlers" data-applies="people"><span class="cp-task-body">Allow bonding with particular handlers<span class="cp-task-desc">Limit handling to a small number of consistent handlers while the dog builds trust.</span></span><span class="suggested-badge">Suggested</span></label>
+    </div>
+
+    <div class="cp-task-group">
+      <div class="cp-task-group-title">Foundation training</div>
+      <label class="cp-task-item"><input type="checkbox" class="cp-task" data-task="Foundation training: Sit, Touch, Look, Drop" data-applies="arousal,dogs,anxiety,prey,coop"><span class="cp-task-body">Foundation training: Sit, Touch, Look, Drop<span class="cp-task-desc">Core force-free skills. Mark each correct response with YES, then reward.</span></span><span class="suggested-badge">Suggested</span></label>
+      <label class="cp-task-item"><input type="checkbox" class="cp-task" data-task="Specific LOOK and touch training" data-applies="prey"><span class="cp-task-body">Specific LOOK and touch training<span class="cp-task-desc">Focused practice of LOOK (eye contact on cue) and Touch (hand target) for impulse control around small dogs.</span></span><span class="suggested-badge">Suggested</span></label>
+    </div>
+
+    <div class="cp-task-group">
+      <div class="cp-task-group-title">Tug &amp; arousal regulation</div>
+      <label class="cp-task-item"><input type="checkbox" class="cp-task" data-task="Structured tug-of-war (SIT, WAIT, OK, ta, YES on release)" data-applies="arousal,prey"><span class="cp-task-body">Structured tug-of-war<span class="cp-task-desc">Ask the dog to SIT while you hold the toy behind your back. Cue WAIT, then show the toy. While the dog stays sitting, release with OK to play. To end, say &ldquo;ta&rdquo; while placing a treat in front of the dog&rsquo;s nose; the moment the dog releases the toy, mark with YES and deliver the treat.</span></span><span class="suggested-badge">Suggested</span></label>
+    </div>
+
+    <div class="cp-task-group">
+      <div class="cp-task-group-title">Mat, crate &amp; relaxation</div>
+      <label class="cp-task-item"><input type="checkbox" class="cp-task" data-task="Mat training" data-applies="arousal,anxiety,separation,dogs"><span class="cp-task-body">Mat training<span class="cp-task-desc">Reward the dog for calm behaviour on a designated mat. Build duration progressively.</span></span><span class="suggested-badge">Suggested</span></label>
+      <label class="cp-task-item"><input type="checkbox" class="cp-task" data-task="Crate training" data-applies="arousal,separation"><span class="cp-task-body">Crate training<span class="cp-task-desc">Once mat-trained, transfer calm behaviour to the crate. Progress from open-door to closed-door duration.</span></span><span class="suggested-badge">Suggested</span></label>
+      <label class="cp-task-item"><input type="checkbox" class="cp-task" data-task="Relaxation training" data-applies="anxiety,separation"><span class="cp-task-body">Relaxation training<span class="cp-task-desc">Structured calmness work; reward soft body language, slow breathing, side-lying.</span></span><span class="suggested-badge">Suggested</span></label>
+    </div>
+
+    <div class="cp-task-group">
+      <div class="cp-task-group-title">Pattern games</div>
+      <label class="cp-task-item"><input type="checkbox" class="cp-task" data-task="LAT (Look At That)" data-applies="dogs"><span class="cp-task-body">LAT (Look At That)<span class="cp-task-desc">At sub-threshold distance, mark with YES when the dog looks at the trigger, then reward when they look back at the handler.</span></span><span class="suggested-badge">Suggested</span></label>
+      <label class="cp-task-item"><input type="checkbox" class="cp-task" data-task="Super Bowls (pattern game)" data-applies="dogs,novel"><span class="cp-task-body">Super Bowls (mat choice / bowls pattern game)<span class="cp-task-desc">Three to five bowls in a line, a few feet apart. Drop a treat, let the dog eat, wait for eye contact as the start button, then move to the next bowl. Builds confidence, focus and predictability.</span></span><span class="suggested-badge">Suggested</span></label>
+    </div>
+
+    <div class="cp-task-group">
+      <div class="cp-task-group-title">DS/CC: novel objects &amp; environments</div>
+      <label class="cp-task-item"><input type="checkbox" class="cp-task" data-task="DS/CC to novel objects and environments (nosework + Super Bowls)" data-applies="novel"><span class="cp-task-body">DS/CC to novel objects &amp; environments<span class="cp-task-desc">Gradual low-intensity exposure paired with nosework and Super Bowls in novel spaces.</span></span><span class="suggested-badge">Suggested</span></label>
+    </div>
+
+    <div class="cp-task-group">
+      <div class="cp-task-group-title">DS/CC: prey drive</div>
+      <label class="cp-task-item"><input type="checkbox" class="cp-task" data-task="DS/CC to small dogs using a decoy" data-applies="prey"><span class="cp-task-body">DS/CC to small dogs with a decoy<span class="cp-task-desc">Use a fake / decoy dog in the behaviour room. Start at a distance where the dog can disengage and respond to LOOK / Touch, and pair with food.</span></span><span class="suggested-badge">Suggested</span></label>
+    </div>
+
+    <div class="cp-task-group">
+      <div class="cp-task-group-title">Separation work</div>
+      <label class="cp-task-item"><input type="checkbox" class="cp-task" data-task="Gentle departures with nosework / snuffle mat / Kong Wobbler" data-applies="separation"><span class="cp-task-body">Gentle departures with food enrichment<span class="cp-task-desc">Pair brief departures with nosework, a snuffle mat, or a Kong Wobbler during training sessions. Keep departures short and predictable initially.</span></span><span class="suggested-badge">Suggested</span></label>
+    </div>
+
+    <div class="cp-task-group">
+      <div class="cp-task-group-title">Cooperative care</div>
+      <label class="cp-task-item"><input type="checkbox" class="cp-task" data-task="Consent-based cooperative care" data-applies="coop"><span class="cp-task-body">Consent-based cooperative care work<span class="cp-task-desc">Follow the Cooperative Care guide for consent testing, chin rest / station, muzzle conditioning, and husbandry-specific DS/CC.</span></span><span class="suggested-badge">Suggested</span></label>
+    </div>
+
+    <div class="fgroup" style="margin-top:16px"><label class="flabel" for="cp-task-other">Other task (optional)</label><input type="text" id="cp-task-other" class="finput" placeholder="Add a task not listed above"></div>
+
+  </div>
+</div>
+
+<!-- CP 5. GENERATE -->
+<div class="fsec">
+  <div class="fsec-hdr"><h2>5 &mdash; Generate plan</h2></div>
+  <div class="fsec-body">
+    <div class="alert tip"><strong>Teams workflow</strong>The generated plan is formatted to paste cleanly into a Microsoft Teams Planner task description. Each task line has an empty checkbox so handlers can mark progress, and the &ldquo;Session notes&rdquo; area at the bottom is for adding comments after each BMOD session.</div>
+    <div id="cp-note-preview" class="preview"></div>
+    <button class="btn btn-primary" onclick="cpGenerate()">&#x2699;&#xFE0F; Generate plan</button>
+    <button class="btn btn-teams" onclick="cpShareToTeams()">&#x1F4AC; Share to Microsoft Teams</button>
+    <button class="btn btn-copy" id="cp-copy-btn" onclick="cpCopyNote()">&#x1F4CB; Copy plan for Teams</button>
+    <button class="btn-clear" onclick="cpClearAll()">&#10006; Clear care plan fields</button>
+  </div>
+</div>
+
+</div><!-- /tab-careplan -->
+
+<!-- YES marker pop-up -->
+<div id="yes-modal" class="modal-overlay" style="display:none">
+  <div class="modal-box">
+    <span class="modal-tag">Before you begin</span>
+    <h2 class="modal-title">Condition the marker first.</h2>
+    <p class="modal-text">Teach the dog that YES means a reward is coming.</p>
+    <button class="modal-btn" onclick="hideYesModal()">Got it &mdash; start the plan</button>
+  </div>
+</div>
+
+</div><!-- /wrap -->
+
+<script>
+// Crash-proof scroll: scrollIntoView can throw or be missing in some mobile webviews
+function safeScroll(el){ try{ if(el && el.scrollIntoView){ el.scrollIntoView({behavior:'smooth',block:'nearest'}); } }catch(e){} }
+// Auto-fill today's date
+(function(){
+  var now = new Date();
+  var d = now.toISOString().split('T')[0];
+  document.getElementById('adate').value = d;
+  // Default next review = 14 days
+  var nr = new Date(now.getTime() + 14*24*60*60*1000);
+  document.getElementById('nextreview').value = nr.toISOString().split('T')[0];
+  document.getElementById('revisit').value = nr.toISOString().split('T')[0];
+})();
+
+// Dynamic goals review
+function updateGoalReview() {
+  var container = document.getElementById('goal-review-list');
+  var goals = document.querySelectorAll('.goal-chk:checked');
+  if (goals.length === 0) {
+    container.innerHTML = '<p class="goal-review-empty">Select goals in Section 5 to review progress here.</p>';
+    return;
+  }
+  var html = '';
+  goals.forEach(function(g, idx) {
+    var id = 'gr' + idx;
+    var label = g.dataset.label;
+    html += '<div class="goal-review-item">';
+    html += '<span class="goal-review-label">' + label + '</span>';
+    html += '<div class="goal-btns">';
+    html += '<button type="button" class="goal-btn" id="' + id + '_a" onclick="setGoal(\'' + id + '\',\'achieved\')">&#x2705; Achieved</button>';
+    html += '<button type="button" class="goal-btn" id="' + id + '_p" onclick="setGoal(\'' + id + '\',\'partial\')">&#x26A0; Partial</button>';
+    html += '<button type="button" class="goal-btn" id="' + id + '_n" onclick="setGoal(\'' + id + '\',\'not\')">&#x274C; Not yet</button>';
+    html += '</div></div>';
+  });
+  container.innerHTML = html;
+}
+
+function setGoal(id, val) {
+  ['a','p','n'].forEach(function(s){
+    var btn = document.getElementById(id+'_'+s);
+    if(btn) btn.className = 'goal-btn';
+  });
+  var map = {achieved:'sel-achieved', partial:'sel-partial', not:'sel-not'};
+  var key = {achieved:'a', partial:'p', not:'n'};
+  var btn = document.getElementById(id+'_'+key[val]);
+  if(btn) btn.className = 'goal-btn ' + map[val];
+}
+
+// Build the note text
+function buildNote() {
+  var f = function(id){ var e=document.getElementById(id); return e?e.value.trim():''; };
+  var dog = f('dogname'), sh = f('shnum'), handler = f('handler');
+  var adate = f('adate'), nsess = f('nsessions'), nextrev = f('nextreview');
+  var fearScore = f('fear-score'), arousalScore = f('arousal-score');
+  var obs = f('observation'), pathway = f('pathway'), revisit = f('revisit');
+  var nextOther = f('next-other'), goalOther = f('goal-other'), probOther = f('prob-other');
+
+  if(!dog){ alert('Please enter the dog name.'); return null; }
+  if(!handler){ alert('Please enter the Vet AA name.'); return null; }
+
+  // Format dates
+  function fmtDate(iso){ if(!iso) return ''; var p=iso.split('-'); return p[2]+'/'+p[1]+'/'+p[0]; }
+
+  var probs = Array.from(document.querySelectorAll('.prob-chk:checked')).map(function(c){return c.dataset.label;});
+  if(probOther) probs.push(probOther);
+
+  // Goals selected
+  var goals = Array.from(document.querySelectorAll('.goal-chk:checked')).map(function(c){return c.dataset.label;});
+  if(goalOther) goals.push(goalOther);
+
+  // Cues
+  var cues = Array.from(document.querySelectorAll('.cue-chk:checked')).map(function(c){return c.dataset.label;});
+
+  // Goals review results
+  var goalResults = [];
+  document.querySelectorAll('.goal-review-item').forEach(function(item, idx){
+    var labelEl = item.querySelector('.goal-review-label');
+    var label = labelEl ? labelEl.textContent.trim() : '';
+    var id = 'gr'+idx;
+    var achieved = document.getElementById(id+'_a');
+    var partial = document.getElementById(id+'_p');
+    var notYet = document.getElementById(id+'_n');
+    var result = 'Not reviewed';
+    if(achieved && achieved.className.includes('sel-achieved')) result = 'Achieved';
+    else if(partial && partial.className.includes('sel-partial')) result = 'Partially achieved';
+    else if(notYet && notYet.className.includes('sel-not')) result = 'Not yet achieved';
+    goalResults.push({label:label, result:result});
+  });
+
+  // Next steps
+  var nextSteps = Array.from(document.querySelectorAll('.next-chk:checked')).map(function(c){return c.dataset.label;});
+  if(nextOther) nextSteps.push(nextOther);
+
+  // Overall goals achieved?
+  var achCount = goalResults.filter(function(g){return g.result==='Achieved';}).length;
+  var partCount = goalResults.filter(function(g){return g.result==='Partially achieved';}).length;
+  var overallGoals = goalResults.length===0 ? '' :
+    (achCount===goalResults.length ? 'All goals achieved' :
+    (achCount===0 && partCount===0 ? 'Goals not yet achieved' : 'Goals partially achieved'));
+
+  // Build note
+  var sep = '\r' + sep;
+  var n = '';
+  n += 'BMOD REASSESSMENT \u2014 ' + dog.toUpperCase() + (sh?' (#'+sh+')':'') + sep;
+  n += 'Date: ' + fmtDate(adate) + ' | Handler: ' + handler + ' | Sessions (past 2 wks): ' + (nsess||'0') + sep;
+  if(nextrev) n += 'Next review: ' + fmtDate(nextrev) + sep;
+  n += '\n';
+
+  if(probs.length){
+    n += 'BEHAVIOUR PROBLEM LIST:' + sep;
+    probs.forEach(function(p){ n += '\u2022 ' + p + sep; });
+    n += '\n';
+  }
+
+  if(fearScore || arousalScore){
+    n += 'CURRENT SCORES:' + sep;
+    if(fearScore) n += '\u2022 Fear: ' + fearScore + sep;
+    if(arousalScore) n += '\u2022 Arousal: ' + arousalScore + sep;
+    n += '\n';
+  }
+
+  if(cues.length){
+    n += 'KNOWN CUES: ' + cues.join(' | ') + '\n' + sep;
+  }
+
+  if(goals.length){
+    n += 'GOALS THIS PERIOD:' + sep;
+    goals.forEach(function(g){ n += '\u2022 ' + g + sep; });
+    n += '\n';
+  }
+
+  if(obs){
+    n += 'BEHAVIOURAL OBSERVATION:' + sep + obs + '\n' + sep;
+  }
+
+  if(goalResults.length){
+    n += 'GOALS REVIEW:' + sep;
+    goalResults.forEach(function(g){
+      var icon = g.result==='Achieved' ? '\u2705' : g.result==='Partially achieved' ? '\u26A0\uFE0F' : '\u274C';
+      n += icon + ' ' + g.label + ' \u2014 ' + g.result + sep;
+    });
+    if(overallGoals) n += '\nOverall: ' + overallGoals + sep;
+    n += '\n';
+  }
+
+  if(nextSteps.length){
+    n += 'NEXT STEPS:' + sep;
+    nextSteps.forEach(function(s){ n += '\u2022 ' + s + sep; });
+    n += '\n';
+  }
+
+  if(pathway) n += 'PATHWAY: ' + pathway + sep;
+  if(revisit) n += 'REVISIT: ' + fmtDate(revisit) + sep;
+  n += '\n\u2014 RSPCA Victoria Behaviour Program | BMOD Reassessment';
+
+  return n;
+}
+
+var _lastNote = '';
+
+function generateNote() {
+  var note = buildNote();
+  if(!note) return;
+  _lastNote = note;
+  var prev = document.getElementById('note-preview');
+  prev.textContent = note;
+  prev.style.display = 'block';
+  safeScroll(prev);
+}
+
+function copyNote() {
+  if(!_lastNote){ generateNote(); if(!_lastNote) return; }
+  navigator.clipboard.writeText(_lastNote).then(function(){
+    var b = document.getElementById('copy-btn');
+    var orig = b.textContent;
+    b.textContent = '\u2713 Copied to clipboard!';
+    setTimeout(function(){ b.textContent = orig; }, 2500);
+  });
+}
+
+function shareToTeams() {
+  if(!_lastNote){ generateNote(); if(!_lastNote) return; }
+  navigator.clipboard.writeText(_lastNote).then(function(){
+    var b = document.querySelector('.btn-teams');
+    var orig = b ? b.textContent : '';
+    if(b){ b.textContent = '✓ Note copied — opening Teams, then paste'; }
+    setTimeout(function(){ if(b) b.textContent = orig; }, 5000);
+    // msteams:// opens the Teams desktop or mobile app directly
+    // bypasses the browser entirely so Firefox or Safari does not matter
+    window.location.href = 'msteams://';
+  }).catch(function(){
+    window.location.href = 'msteams://';
+  });
+}
+
+function shareNote() {
+  if(!_lastNote){ generateNote(); if(!_lastNote) return; }
+  if(navigator.share){ navigator.share({text:_lastNote}).catch(function(){}); }
+  else { copyNote(); }
+}
+
+function clearAll() {
+  if(!confirm('Clear all fields and start again?')) return;
+  document.querySelectorAll('.finput,.ftextarea').forEach(function(e){ e.value=''; });
+  document.querySelectorAll('.fselect').forEach(function(e){ e.selectedIndex=0; });
+  document.querySelectorAll('input[type=checkbox]').forEach(function(e){ e.checked=false; });
+  // med-notes removed
+  document.getElementById('note-preview').style.display='none';
+  _lastNote = '';
+  updateGoalReview();
+  // Re-set dates
+  var now = new Date();
+  document.getElementById('adate').value = now.toISOString().split('T')[0];
+  var nr = new Date(now.getTime()+14*24*60*60*1000);
+  document.getElementById('nextreview').value = nr.toISOString().split('T')[0];
+  document.getElementById('revisit').value = nr.toISOString().split('T')[0];
+}
+// ===== TAB SWITCHING =====
+function switchTab(tab){
+  document.querySelectorAll('.tab-pane').forEach(function(p){ p.style.display='none'; });
+  document.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.remove('active'); });
+  document.getElementById('tab-'+tab).style.display='block';
+  var btn = document.querySelector('.tab-btn[data-tab="'+tab+'"]');
+  if(btn) btn.classList.add('active');
+  if(tab==='careplan'){
+    syncToCareplan();
+    if(!_yesShownThisPlan){ showYesModal(); _yesShownThisPlan=true; }
+  } else if(tab==='reassessment'){
+    syncFromCareplan();
+  }
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function syncToCareplan(){
+  var sh=document.getElementById('shnum').value;
+  var dog=document.getElementById('dogname').value;
+  var hand=document.getElementById('handler').value;
+  if(sh && !document.getElementById('cp-shnum').value) document.getElementById('cp-shnum').value=sh;
+  if(dog && !document.getElementById('cp-dogname').value) document.getElementById('cp-dogname').value=dog;
+  if(hand && !document.getElementById('cp-handler').value) document.getElementById('cp-handler').value=hand;
+}
+function syncFromCareplan(){
+  var sh=document.getElementById('cp-shnum').value;
+  var dog=document.getElementById('cp-dogname').value;
+  var hand=document.getElementById('cp-handler').value;
+  if(sh && !document.getElementById('shnum').value) document.getElementById('shnum').value=sh;
+  if(dog && !document.getElementById('dogname').value) document.getElementById('dogname').value=dog;
+  if(hand && !document.getElementById('handler').value) document.getElementById('handler').value=hand;
+}
+
+// ===== YES MODAL =====
+var _yesShownThisPlan = false;
+function showYesModal(){ document.getElementById('yes-modal').style.display='flex'; }
+function hideYesModal(){ document.getElementById('yes-modal').style.display='none'; }
+
+// ===== CARE PLAN: smart suggestions =====
+function cpUpdateSuggestions(){
+  var ticked = {};
+  document.querySelectorAll('.cp-prob:checked').forEach(function(c){ ticked[c.dataset.prob] = true; });
+  document.querySelectorAll('.cp-task').forEach(function(task){
+    var applies = (task.dataset.applies||'').split(',');
+    var isSuggested = applies.some(function(p){ return p && ticked[p]; });
+    var item = task.closest('.cp-task-item');
+    if(isSuggested){
+      item.classList.add('suggested');
+      if(!task.dataset.userTouched){ task.checked = true; }
+    } else {
+      item.classList.remove('suggested');
+      if(!task.dataset.userTouched){ task.checked = false; }
+    }
+  });
+  cpRefreshCheckedStyles();
+}
+function cpRefreshCheckedStyles(){
+  document.querySelectorAll('.cp-prob-item').forEach(function(item){
+    var inp = item.querySelector('input');
+    if(inp && inp.checked) item.classList.add('checked'); else item.classList.remove('checked');
+  });
+  document.querySelectorAll('.cp-task-item').forEach(function(item){
+    var inp = item.querySelector('input');
+    if(inp && inp.checked) item.classList.add('checked'); else item.classList.remove('checked');
+  });
+}
+
+document.addEventListener('change', function(e){
+  if(!e.target) return;
+  if(e.target.classList && e.target.classList.contains('cp-task')){
+    e.target.dataset.userTouched = '1';
+    cpRefreshCheckedStyles();
+  } else if(e.target.classList && e.target.classList.contains('cp-prob')){
+    cpUpdateSuggestions();
+  }
+});
+
+// ===== CARE PLAN: generate / copy / share =====
+function cpFmtDate(iso){ if(!iso) return ''; var p=iso.split('-'); return p[2]+'/'+p[1]+'/'+p[0]; }
+function cpBuildNote(){
+  var f=function(id){var e=document.getElementById(id);return e?e.value.trim():'';};
+  var sh=f('cp-shnum'), dog=f('cp-dogname'), pdate=f('cp-pdate'), rev=f('cp-revdate'), handler=f('cp-handler');
+  if(!dog){ alert('Please enter the dog name before generating the plan.'); return null; }
+  var probOther=f('cp-prob-other'), goalOther=f('cp-goal-other'), taskOther=f('cp-task-other');
+  var probs = Array.from(document.querySelectorAll('.cp-prob:checked')).map(function(c){return c.dataset.label;});
+  if(probOther) probs.push(probOther);
+  var goals = Array.from(document.querySelectorAll('.cp-goal:checked')).map(function(c){return c.dataset.label;});
+  if(goalOther) goals.push(goalOther);
+  var tasks = Array.from(document.querySelectorAll('.cp-task:checked')).map(function(c){return c.dataset.task;});
+  if(taskOther) tasks.push(taskOther);
+
+  if(probs.length===0){ if(!confirm('No problems selected. Generate plan anyway?')) return null; }
+  if(tasks.length===0){ if(!confirm('No tasks selected. Generate plan anyway?')) return null; }
+
+  var sep = '\r\n';
+  var n = '';
+  n += 'CARE PLAN \u2014 ' + dog.toUpperCase() + (sh?' (#'+sh+')':'') + sep;
+  n += 'Plan date: ' + cpFmtDate(pdate) + ' | Review: ' + cpFmtDate(rev) + (handler?' | Handler: ' + handler:'') + sep;
+  n += sep;
+  if(probs.length){
+    n += 'CURRENT PROBLEMS:' + sep;
+    probs.forEach(function(p){ n += '\u2022 ' + p + sep; });
+    n += sep;
+  }
+  if(goals.length){
+    n += 'GOALS THIS FORTNIGHT:' + sep;
+    goals.forEach(function(g){ n += '\u2022 ' + g + sep; });
+    n += sep;
+  }
+  n += 'MARKER WORD: YES (condition first if not yet established)' + sep + sep;
+  if(tasks.length){
+    n += 'TASKS THIS FORTNIGHT:' + sep;
+    tasks.forEach(function(t){ n += '[ ] ' + t + sep; });
+    n += sep;
+  }
+  n += 'SESSION NOTES (add under each session below):' + sep;
+  n += '\u2014 ' + sep;
+  n += '\u2014 ' + sep;
+  n += '\u2014 ' + sep + sep;
+  n += '\u2014 RSPCA Victoria Behaviour Program | Care Plan';
+  return n;
+}
+
+var _cpLastNote = '';
+function cpGenerate(){
+  var note = cpBuildNote(); if(!note) return;
+  _cpLastNote = note;
+  var prev = document.getElementById('cp-note-preview');
+  prev.textContent = note;
+  prev.style.display = 'block';
+  safeScroll(prev);
+}
+function cpCopyNote(){
+  if(!_cpLastNote){ cpGenerate(); if(!_cpLastNote) return; }
+  var b=document.getElementById('cp-copy-btn');
+  cpCopyText(_cpLastNote).then(function(){ cpFlash(b,'\u2713 Copied for Teams'); }, function(){ cpFlash(b,'Select the plan above to copy'); var prev=document.getElementById('cp-note-preview'); prev.style.display='block'; safeScroll(prev); });
+}
+function cpShareToTeams(){
+  if(!_cpLastNote){ cpGenerate(); if(!_cpLastNote) return; }
+  var b=document.querySelector('#tab-careplan .btn-teams');
+  cpCopyText(_cpLastNote).then(function(){ cpFlash(b,'\u2713 Copied \u2014 opening Teams, paste into a Planner task'); window.location.href='msteams://'; }, function(){ cpFlash(b,'Opening Teams \u2014 copy plan first'); window.location.href='msteams://'; });
+}
+function cpCopyText(text){
+  return new Promise(function(resolve,reject){
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(resolve, function(){ cpFallbackCopy(text,resolve,reject); });
+    } else { cpFallbackCopy(text,resolve,reject); }
+  });
+}
+function cpFallbackCopy(text,resolve,reject){
+  try{
+    var ta=document.createElement('textarea');
+    ta.value=text; ta.setAttribute('readonly','');
+    ta.style.position='fixed'; ta.style.top='0'; ta.style.left='0'; ta.style.opacity='0';
+    document.body.appendChild(ta); ta.focus(); ta.select();
+    try{ ta.setSelectionRange(0,text.length); }catch(e){}
+    var ok=document.execCommand('copy');
+    document.body.removeChild(ta);
+    if(ok) resolve(); else reject();
+  } catch(e){ reject(); }
+}
+function cpFlash(btn,msg){ if(!btn) return; var orig=btn.textContent; btn.textContent=msg; setTimeout(function(){ btn.textContent=orig; }, 2500); }
+function cpClearAll(){
+  if(!confirm('Clear all care plan fields and start again?')) return;
+  document.querySelectorAll('#tab-careplan .finput').forEach(function(e){ e.value=''; });
+  document.querySelectorAll('.cp-prob,.cp-goal,.cp-task').forEach(function(e){ e.checked=false; delete e.dataset.userTouched; });
+  document.querySelectorAll('.cp-task-item').forEach(function(item){ item.classList.remove('suggested','checked'); });
+  document.getElementById('cp-note-preview').style.display='none';
+  _cpLastNote='';
+  _yesShownThisPlan=false;
+  var now=new Date();
+  document.getElementById('cp-pdate').value=now.toISOString().split('T')[0];
+  var rev=new Date(now.getTime()+14*24*60*60*1000);
+  document.getElementById('cp-revdate').value=rev.toISOString().split('T')[0];
+  cpRefreshCheckedStyles();
+}
+
+// ===== CARE PLAN: init dates =====
+(function(){
+  var now=new Date();
+  var pdate=document.getElementById('cp-pdate'); if(pdate && !pdate.value) pdate.value=now.toISOString().split('T')[0];
+  var rev=document.getElementById('cp-revdate'); if(rev && !rev.value) rev.value=new Date(now.getTime()+14*24*60*60*1000).toISOString().split('T')[0];
+})();
+</script>
+</body>
+</html>
